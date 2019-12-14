@@ -5,7 +5,15 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 
 const mongoose = require('mongoose')
-mongoose.connect(process.env.MLAB_URI || 'mongodb://localhost/exercise-track' )
+
+mongoose.connect("mongodb+srv://eze:fcc456@cluster0-py5g6.mongodb.net/test?retryWrites=true&w=majority",
+                 { useUnifiedTopology: true , useNewUrlParser: true }, function(err){
+  if(err) return console.log(err)
+  
+  return console.log(mongoose.connection.readyState)  
+  
+});
+
 
 app.use(cors())
 
