@@ -31,10 +31,11 @@ app.use(bodyParser.json())
 
 
 var userSchema = new mongoose.Schema({
+  userName: String,
   userId: String,
   description: String,
   duration: Number,
-  date: Date
+  date: { type: Date, default: Date.now }
 });
 
 let User = mongoose.model("User", userSchema);
@@ -47,8 +48,19 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
 });
 
-app.get("/api/exercise/:new-user", function(req,res){
+app.get("/api/exercise/:newUser", function(req,res){
   
+  console.log(req.params.newUser)
+  
+  User.find({userName: req.params.newUser}, function(err,found){
+    if(err) return console.log(err)
+    
+    if(found){      
+      console.log("found")
+    } else {
+      console.log("not found2")
+    }
+  })
 })
 
 // Not found middleware
