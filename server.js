@@ -41,8 +41,6 @@ var userSchema = new mongoose.Schema({
 
 let User = mongoose.model("User", userSchema);
 
-
-
 app.use(express.static('public'))
 
 app.get('/', (req, res) => {
@@ -60,10 +58,9 @@ app.post("/api/exercise/new-user/", function(req,res){
       console.log("not found2")
       
       //CREATE NEW USER
-      
       let newUser = {username: req.body.username, _id: sha(req.body.username).substring(0,7) }
-          
-          User.create(newUser, function(err, created){
+      
+      User.create(newUser, function(err, created){
             if(err) return console.log(err)
             
             console.log(created, "created")
