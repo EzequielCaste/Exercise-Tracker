@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+var sha = require("sha-1");
 const bodyParser = require('body-parser')
 
 const cors = require('cors')
@@ -32,7 +33,7 @@ app.use(bodyParser.json())
 
 var userSchema = new mongoose.Schema({
   userName: String,
-  userId: String,
+  _id: String,
   description: String,
   duration: Number,
   date: { type: Date, default: Date.now }
@@ -49,8 +50,31 @@ app.get('/', (req, res) => {
 });
 
 app.post("/api/exercise/new-user/", function(req,res){
-  
-  console.log(req.body.username)
+
+    User.findOne({userName: req.body.username}, function(err,found){
+    if(err) return console.log(err)
+    
+    if(found){      
+      console.log("found", found)
+    } else {
+      console.log("not found2")
+      
+      //CREATE NEW USER
+      
+      let newUser = {username: req.body.username}
+          
+          User.create(newAddress, function(err, created){
+            if(err) return console.log(err)
+            
+            console.log(created, "created")
+            //res.sendFile(path.join(__dirname, "views", "test.html"));
+            res.json({
+            "original_url": "https://" + created.address,
+            "short_url": created.hashId
+          })
+      
+    }
+  })
   
 })
 
