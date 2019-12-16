@@ -32,10 +32,10 @@ app.use(bodyParser.json())
 
 
 var userSchema = new mongoose.Schema({
-  userName: String,
   _id: String,
   description: String,
   duration: Number,
+  userName: String,
   date: { type: Date, default: Date.now }
 });
 
@@ -61,21 +61,16 @@ app.post("/api/exercise/new-user/", function(req,res){
       
       //CREATE NEW USER
       
-      let newUser = {username: req.body.username}
+      let newUser = {username: req.body.username, _id: sha(req.body.username).substring(0,7) }
           
-          User.create(newAddress, function(err, created){
+          User.create(newUser, function(err, created){
             if(err) return console.log(err)
             
             console.log(created, "created")
-            //res.sendFile(path.join(__dirname, "views", "test.html"));
-            res.json({
-            "original_url": "https://" + created.address,
-            "short_url": created.hashId
-          })
-      
-    }
-  })
-  
+            
+      })
+  }  
+})
 })
 
 // Not found middleware
