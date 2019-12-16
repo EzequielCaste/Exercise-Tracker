@@ -48,19 +48,10 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
 });
 
-app.get("/api/exercise/:newUser", function(req,res){
+app.post("/api/exercise/new-user/", function(req,res){
   
-  console.log(req.params.newUser)
+  console.log(req.body.username)
   
-  User.find({userName: req.params.newUser}, function(err,found){
-    if(err) return console.log(err)
-    
-    if(found){      
-      console.log("found")
-    } else {
-      console.log("not found2")
-    }
-  })
 })
 
 // Not found middleware
