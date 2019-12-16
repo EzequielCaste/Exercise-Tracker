@@ -29,6 +29,18 @@ app.use(bodyParser.json())
 
 */
 
+
+var userSchema = new mongoose.Schema({
+  userId: String,
+  description: String,
+  duration: Number,
+  date: Date
+});
+
+let User = mongoose.model("User", userSchema);
+
+
+
 app.use(express.static('public'))
 
 app.get('/', (req, res) => {
