@@ -22,9 +22,6 @@ app.use(bodyParser.json())
 
 /*
 
-
-2. I can get an array of all users by getting api/exercise/users with the same info as when creating a user.
-3. I can add an exercise to any user by posting form data userId(_id), description, duration, and optionally date to /api/exercise/add. If no date supplied it will use current date. Returned will be the user object with also with the exercise fields added.
 4. I can retrieve a full exercise log of any user by getting /api/exercise/log with a parameter of userId(_id). Return will be the user object with added array log and count (total exercise count).
 5. I can retrieve part of the log of any user by also passing along optional parameters of from & to or limit. (Date format yyyy-mm-dd, limit = int)
 
@@ -33,11 +30,17 @@ app.use(bodyParser.json())
 
 var userSchema = new mongoose.Schema({
   _id: String,
+  username: String  
+});
+
+let taskSchema = new mongoose.Schema({
   description: String,
   duration: Number,
-  uName: String,
   date: { type: Date, default: Date.now }
-});
+})
+
+let Task = mongoose.model("Task", taskSchema)
+  
 
 let User = mongoose.model("User", userSchema);
 
@@ -48,35 +51,51 @@ app.get('/', (req, res) => {
 });
 
 /*
-1. I can create a user by posting form data username to /api/exercise/new-user and returned will be an object with username and _id.
+1. I can create a user by posting form data username to /api/exercise/new-user 
+and returned will be an object with username and _id.
 */
+
 app.post("/api/exercise/new-user/", function(req,res){
 
-    User.findOne({uName: req.body.username}, function(err,found){
+    User.findOne({username: req.body.username}, function(err,found){
     if(err) return console.log(err)
     
-    if(found){      
-      res.json({
-        username: found.uName,
-        _id: found._id
-      })
-    } else {
-      console.log("not found2", req.body.username)
-      
-      //CREATE NEW USER
-          
-      User.create({uName: req.body.username, _id: sha(req.body.username).substring(0,7)}, function(err, created){
-            if(err) return console.log(err)
-            
-            res.json({
-              username: created.uName,
-              _id: created._id
-            })
-            
-      })
-  }  
+      if(found){      
+        res.json({
+          username: found.uName,
+          _id: found._id
+        })
+      } else {
+        console.log("not found2", req.body.username)
+
+        //CREATE NEW USER
+
+        User.create({username: req.body.username, _id: sha(req.body.username).substring(0,7)}, function(err, created){
+              if(err) return console.log(err)
+
+              res.json({
+                username: created.username,
+                _id: created._id
+              })
+
+        })
+    }  
 })
 })
+
+/*
+2. I can get an array of all users by getting api/exercise/users 
+with the same info as when creating a user.
+*/
+
+app.get("/api/exercise/users/", function(req,res){
+  User.find({}, function(err, found){
+    res.json(found)
+  })
+})
+
+
+
 
 // Not found middleware
 app.use((req, res, next) => {
