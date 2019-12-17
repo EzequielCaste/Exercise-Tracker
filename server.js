@@ -119,14 +119,21 @@ app.post("/api/exercise/add", function(req,res){
     
     if(found){
       console.log("found3")
+      
+      Task.create({username: req.body.username, description: req.body.description, duration: req.body.duration, date: req.body.date}, function(err, created){
+      if(err) return console.log(err)
+      
+      res.json({
+        userId: req.body.userId
+      }
+               created)
+        
+        
+    })
     } else{
       console.log("not found 3")
       
-      Task.create({username: req.body.username, _id: req.body.userId, description: req.body.description, duration: req.body.duration, date: req.body.date}, function(err, created){
-      if(err) return console.log(err)
       
-      res.json(created)
-    })
     }
 
     
