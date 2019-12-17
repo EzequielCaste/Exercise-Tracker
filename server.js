@@ -165,7 +165,9 @@ app.get("/api/exercise/log", function(req, res){
   
   console.log(req.query.userId)
   
-  Task.find({username: req.query.userId}, function(err, found){
+  User.findOne({})
+  
+  Task.find({}, function(err, found){
     if(err) return console.log(err)
     
     if(found){
