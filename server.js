@@ -37,7 +37,7 @@ let taskSchema = new mongoose.Schema({
   username: String,
   description: String,
   duration: Number,
-  date: { type: Date, default: Date.now }
+  date: { type: Date, default: Date.now() }
 })
 
 let Task = mongoose.model("Task", taskSchema)  
@@ -118,19 +118,14 @@ app.post("/api/exercise/add", function(req,res){
     if(found){
       console.log("found3", found)
       
-      let newDate;
-      
-      if(req.body.date){
-        newDate = Date.now
-      } else {
-        newDate = req.body.date
-      }
+      let newDate = req.body.date ? req.body.date : Date.now()
       
       Task.create({
         username: found.username, 
         description: req.body.description, 
-        duration: req.body.duration,  
-        date: newDate},
+        duration: req.body.duration,
+        date: newDate
+        },
         function(err, created){
           if(err) return console.log(err)
         
