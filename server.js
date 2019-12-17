@@ -118,12 +118,19 @@ app.post("/api/exercise/add", function(req,res){
     if(found){
       console.log("found3", found)
       
+      let newDate;
+      
+      if(req.body.date){
+        newDate = Date.now
+      } else {
+        newDate = req.body.date
+      }
       
       Task.create({
         username: found.username, 
         description: req.body.description, 
         duration: req.body.duration,  
-        date: req.body.date},
+        date: newDate},
         function(err, created){
           if(err) return console.log(err)
         
