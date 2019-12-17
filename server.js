@@ -22,7 +22,7 @@ app.use(bodyParser.json())
 
 /*
 
-4. I can retrieve a full exercise log of any user by getting /api/exercise/log with a parameter of userId(_id). Return will be the user object with added array log and count (total exercise count).
+
 5. I can retrieve part of the log of any user by also passing along optional parameters of from & to or limit. (Date format yyyy-mm-dd, limit = int)
 
 */
@@ -146,16 +146,20 @@ app.post("/api/exercise/add", function(req,res){
       res.json({
         error: "User ID does not exist"
         
-      })
-      
-      
+      })  
     }
-
-    
-    
   })
-  
 })
+
+/*
+
+4. I can retrieve a full exercise log of any user by getting 
+/api/exercise/log with a parameter of userId(_id). 
+Return will be the user object with added array log and count (total exercise count).
+
+*/
+
+app.get("/api/exercise/log:id")
 
 // Not found middleware
 app.use((req, res, next) => {
