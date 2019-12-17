@@ -37,7 +37,6 @@ let taskSchema = new mongoose.Schema({
   username: String,
   description: String,
   duration: Number,
-  _id: String,
   date: { type: Date, default: Date.now }
 })
 
@@ -118,18 +117,23 @@ app.post("/api/exercise/add", function(req,res){
     if(err) return console.log(err)
     
     if(found){
-      console.log("found3")
+      console.log("found3", found)
       
-      Task.create({username: req.body.username, description: req.body.description, duration: req.body.duration, date: req.body.date}, function(err, created){
-      if(err) return console.log(err)
       
-      res.json({
-        userId: req.body.userId
-      }
-               created)
+      Task.create({
+        username: found.username, 
+        description: req.body.description, 
+        duration: req.body.duration,  
+        date: req.body.date},
+        function(err, created){
+          if(err) return console.log(err)
         
+          res.json(created)
         
-    })
+      })
+               
+        
+  
     } else{
       console.log("not found 3")
       
