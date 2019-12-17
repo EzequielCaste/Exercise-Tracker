@@ -22,7 +22,7 @@ app.use(bodyParser.json())
 
 /*
 
-1. I can create a user by posting form data username to /api/exercise/new-user and returned will be an object with username and _id.
+
 2. I can get an array of all users by getting api/exercise/users with the same info as when creating a user.
 3. I can add an exercise to any user by posting form data userId(_id), description, duration, and optionally date to /api/exercise/add. If no date supplied it will use current date. Returned will be the user object with also with the exercise fields added.
 4. I can retrieve a full exercise log of any user by getting /api/exercise/log with a parameter of userId(_id). Return will be the user object with added array log and count (total exercise count).
@@ -35,7 +35,7 @@ var userSchema = new mongoose.Schema({
   _id: String,
   description: String,
   duration: Number,
-  userName: String,
+  uName: String,
   date: { type: Date, default: Date.now }
 });
 
@@ -47,23 +47,31 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
 });
 
+/*
+1. I can create a user by posting form data username to /api/exercise/new-user and returned will be an object with username and _id.
+*/
 app.post("/api/exercise/new-user/", function(req,res){
 
-    User.findOne({userName: req.body.username}, function(err,found){
+    User.findOne({uName: req.body.username}, function(err,found){
     if(err) return console.log(err)
     
     if(found){      
-      console.log("found", found)
+      res.json({
+        username: found.uName,
+        _id: found._id
+      })
     } else {
-      console.log("not found2")
+      console.log("not found2", req.body.username)
       
       //CREATE NEW USER
-      let newUser = {username: req.body.username, _id: sha(req.body.username).substring(0,7) }
-      
-      User.create(newUser, function(err, created){
+          
+      User.create({uName: req.body.username, _id: sha(req.body.username).substring(0,7)}, function(err, created){
             if(err) return console.log(err)
             
-            console.log(created, "created")
+            res.json({
+              username: created.uName,
+              _id: created._id
+            })
             
       })
   }  
