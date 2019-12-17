@@ -40,8 +40,7 @@ let taskSchema = new mongoose.Schema({
   date: { type: Date, default: Date.now }
 })
 
-let Task = mongoose.model("Task", taskSchema)
-  
+let Task = mongoose.model("Task", taskSchema)  
 
 let User = mongoose.model("User", userSchema);
 
@@ -128,14 +127,24 @@ app.post("/api/exercise/add", function(req,res){
         function(err, created){
           if(err) return console.log(err)
         
-          res.json(created)
+          res.json({
+            username: created.username,
+            description: created.description,
+            duration: created.duration,
+            _id: found._id,
+            date: created.date 
+          })
         
       })
                
         
   
     } else{
-      console.log("not found 3")
+      
+      res.json({
+        error: "User ID does not exist"
+        
+      })
       
       
     }
