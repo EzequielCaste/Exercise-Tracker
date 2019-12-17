@@ -33,23 +33,11 @@ var userSchema = new mongoose.Schema({
   username: String  
 });
 
-/*
-{
-
-    "username": "4354435",
-    "description": "dede",
-    "duration": 2,
-    "_id": "HklNFPnBx",
-    "date": "Mon Dec 02 2019"
-
-}
-
-*/
-
-
 let taskSchema = new mongoose.Schema({
+  username: String,
   description: String,
   duration: Number,
+  _id: String,
   date: { type: Date, default: Date.now }
 })
 
@@ -76,7 +64,7 @@ app.post("/api/exercise/new-user/", function(req,res){
     
       if(found){      
         res.json({
-          username: found.uName,
+          username: found.username,
           _id: found._id
         })
       } else {
@@ -86,14 +74,15 @@ app.post("/api/exercise/new-user/", function(req,res){
 
         User.create({username: req.body.username, _id: sha(req.body.username).substring(0,7)}, function(err, created){
               if(err) return console.log(err)
-
-              res.json({
+        
+          return res.json({
                 username: created.username,
                 _id: created._id
-              })
+              })              
 
         })
-    }  
+      }
+      
 })
 })
 
@@ -128,13 +117,19 @@ app.post("/api/exercise/add", function(req,res){
   User.findOne({_id: req.body.userId}, function(err, found){
     if(err) return console.log(err)
     
-    console.log(found)
-    
-    Task.create({userId: req.body.userId, description: req.body.description, duration: req.body.duration, date: req.body.date}, function(err, created){
+    if(found){
+      console.log("found3")
+    } else{
+      console.log("not found 3")
+      
+      Task.create({username: req.body.username, _id: req.body.userId, description: req.body.description, duration: req.body.duration, date: req.body.date}, function(err, created){
       if(err) return console.log(err)
       
-      console.log(created)
+      res.json(created)
     })
+    }
+
+    
     
   })
   
