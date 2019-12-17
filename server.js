@@ -159,9 +159,11 @@ Return will be the user object with added array log and count (total exercise co
 
 */
 
-app.get("/api/exercise/log?userId=:id", function(req, res){
+// /api/exercise/log?userId=056eafe
+
+app.get("/api/exercise/log?{userId}", function(req, res){
   
-  console.log(req.params.id)
+  console.log(req.params)
 
   
 })
