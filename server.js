@@ -94,8 +94,31 @@ app.get("/api/exercise/users/", function(req,res){
   })
 })
 
+/*
 
+3. I can add an exercise to any user by posting form data userId(_id), description, 
+duration, and optionally date to /api/exercise/add. 
+If no date supplied it will use current date. 
+Returned will be the user object with also with the exercise fields added.
 
+*/
+
+app.post("/api/exercise/add", function(req,res){
+  
+  //console.log(req.body)
+  
+  /*
+  { userId: '637a81e', description: 'sdf',duration: '3',date: '2019-12-2' }
+  */
+  
+  User.findOne({_id: req.body.userId}, function(err, found){
+    if(err) return console.log(err)
+    
+    console.log(found)
+    
+  })
+  
+})
 
 // Not found middleware
 app.use((req, res, next) => {
