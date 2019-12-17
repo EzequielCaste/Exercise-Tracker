@@ -33,6 +33,20 @@ var userSchema = new mongoose.Schema({
   username: String  
 });
 
+/*
+{
+
+    "username": "4354435",
+    "description": "dede",
+    "duration": 2,
+    "_id": "HklNFPnBx",
+    "date": "Mon Dec 02 2019"
+
+}
+
+*/
+
+
 let taskSchema = new mongoose.Schema({
   description: String,
   duration: Number,
@@ -115,6 +129,12 @@ app.post("/api/exercise/add", function(req,res){
     if(err) return console.log(err)
     
     console.log(found)
+    
+    Task.create({userId: req.body.userId, description: req.body.description, duration: req.body.duration, date: req.body.date}, function(err, created){
+      if(err) return console.log(err)
+      
+      console.log(created)
+    })
     
   })
   
