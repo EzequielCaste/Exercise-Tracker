@@ -159,7 +159,12 @@ Return will be the user object with added array log and count (total exercise co
 
 */
 
-app.get("/api/exercise/log:id")
+app.get("/api/exercise/log?userId=:id", function(req, res){
+  
+  console.log(req.params.id)
+
+  
+})
 
 // Not found middleware
 app.use((req, res, next) => {
