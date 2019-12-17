@@ -161,9 +161,21 @@ Return will be the user object with added array log and count (total exercise co
 
 // /api/exercise/log?userId=056eafe
 
-app.get("/api/exercise/log?{userId}", function(req, res){
+app.get("/api/exercise/log", function(req, res){
   
-  console.log(req.params)
+  console.log(req.query.userId)
+  
+  Task.find({username: req.query.userId}, function(err, found){
+    if(err) return console.log(err)
+    
+    if(found){
+      console.log("found", found)
+      
+    } else {
+      console.log("not found")
+    }
+    
+  })
 
   
 })
