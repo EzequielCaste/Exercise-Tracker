@@ -191,11 +191,24 @@ app.get("/api/exercise/log", function(req, res){
             ]
 
         }
-        
+        [
+
+    {
+        "date": "2019-12-17T22:55:19.633Z",
+        "_id": "5df95cd7a7083900b8575b8e",
+        "username": "qwe",
+        "description": "wfwerwer",
+        "duration": 3,
+        "__v": 0
+    },
         */
         
         if(found){
-          res.json(found)
+          console.log("found", found)
+          
+          res.json({
+            _id: foundUser._id
+          })
 
         } else {
           console.log("not found")
