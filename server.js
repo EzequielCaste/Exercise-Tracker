@@ -165,13 +165,24 @@ app.get("/api/exercise/log", function(req, res){
   
   console.log(req.query.userId)
   
-  User.findOne({})
+  let user;
+  
+  User.findOne({_id: req.query.userId}, function(err, foundUser){
+    if(err) return console.log(err)
+    
+    if(foundUser){
+      console.log("found user ", foundUser)
+    } else {
+      console.log("not found")
+    }
+    
+  })
   
   Task.find({}, function(err, found){
     if(err) return console.log(err)
     
     if(found){
-      console.log("found", found)
+      //console.log("found", found)
       
     } else {
       console.log("not found")
