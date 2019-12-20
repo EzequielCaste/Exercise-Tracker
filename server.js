@@ -37,7 +37,7 @@ let taskSchema = new mongoose.Schema({
   username: String,
   description: String,
   duration: Number,
-  date: { type: Date, default: Date.now() }
+  date: { type: Date, default: Date(Date.now()).substring(0,16) }
 })
 
 let Task = mongoose.model("Task", taskSchema)  
@@ -66,7 +66,7 @@ app.post("/api/exercise/new-user/", function(req,res){
           _id: found._id
         })
       } else {
-        console.log("not found2", req.body.username)
+    //    console.log("not found2", req.body.username)
 
         //CREATE NEW USER
 
@@ -116,15 +116,17 @@ app.post("/api/exercise/add", function(req,res){
     if(err) return console.log(err)
     
     if(found){
-      console.log("found3", found)
       
-      let newDate = req.body.date ? req.body.date : Date.now()
+      
+      let newDate = req.body.date ? req.body.date : Date(Date.now()).substring(0,16)
+      
+      console.log("found3 dates", newDate )
       
       Task.create({
         username: found.username, 
         description: req.body.description, 
         duration: req.body.duration,
-        date: newDate
+        date: req.body.date ? req.body.date : Date(Date.now()).substring(0,16)
         },
         function(err, created){
           if(err) return console.log(err)
@@ -134,7 +136,7 @@ app.post("/api/exercise/add", function(req,res){
             description: created.description,
             duration: created.duration,
             _id: found._id,
-            date: created.date 
+            date: newDate 
           })
         
       })
@@ -163,7 +165,7 @@ Return will be the user object with added array log and count (total exercise co
 
 app.get("/api/exercise/log", function(req, res){
   
-  console.log(req.query)
+ // console.log(req.query)
   
   let user;
   
@@ -171,43 +173,21 @@ app.get("/api/exercise/log", function(req, res){
     if(err) return console.log(err)
     
     if(foundUser){
-      console.log("found user ", foundUser)
+      //console.log("found user ", foundUser)
       
       Task.find({username: foundUser.username}, function(err, found){
         if(err) return console.log(err)
-
-        /*
-        
-        {
-            "_id": "BJ69zwfAB",
-            "username": "eze",
-            "count": 8,
-            "log": [
-                {
-                    "description": "we234",
-                    "duration": 2,
-                    "date": "Mon Dec 02 2019"
-                }
-            ]
-
-        }
-        [
-
-    {
-        "date": "2019-12-17T22:55:19.633Z",
-        "_id": "5df95cd7a7083900b8575b8e",
-        "username": "qwe",
-        "description": "wfwerwer",
-        "duration": 3,
-        "__v": 0
-    },
-        */
-        
+   
         if(found){
-          console.log("found", found)
+          //console.log("found", found)
+          
+          let countTask
           
           res.json({
-            _id: foundUser._id
+            _id: foundUser._id,
+            username: foundUser.username,
+            count: found.length,
+            log: found
           })
 
         } else {
